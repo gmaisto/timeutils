@@ -3,8 +3,6 @@ package timeutils
 import (
 	"testing"
 	"time"
-
-	"github.com/stretchr/testify/assert"
 )
 
 var format = "2006-01-02 15:04:05"
@@ -89,7 +87,9 @@ func TestIsLeap(t *testing.T) {
 
 	now = New(n)
 
-	assert.NotEqual(t, true, now.IsLeap(), "Error on IsLeap false")
+	if now.IsLeap() != false {
+		t.Errorf("IsLeap FALSE")
+	}
 
 }
 
@@ -135,7 +135,9 @@ func TestYesterday(t *testing.T) {
 		t.Errorf("YesterdayAtTime")
 	}
 
-	assert.Equal(t, "2016-02-28 08:10:10", now.YesterdayAtTime(o).Format(format), "YesterdayAtTime Failed")
+	if now.YesterdayAtTime(o).Format(format) != "2016-02-28 08:10:10" {
+		t.Errorf("YesterdayAtTime")
+	}
 
 }
 
@@ -145,14 +147,19 @@ func TestMisc(t *testing.T) {
 
 	now := New(n)
 
-	assert.Equal(t, "2015-02-07 11:41:49", now.Ago(86400).Format(format), "Ago(86400) Error")
+	if now.Ago(86400).Format(format) != "2015-02-07 11:41:49" {
+		t.Errorf("Ago")
+	}
 
-	assert.Equal(t, "2015-02-09 11:41:49", now.Since(86400).Format(format), "Since(86400) Error")
+	if now.Since(86400).Format(format) != "2015-02-09 11:41:49" {
+		t.Errorf("Since")
+	}
 
-	assert.Equal(t, time.March, now.NextMonth(), "Error on NextMonth()")
+	if now.NextMonth() != time.March {
+		t.Errorf("NextMonth")
+	}
 
 	n = time.Date(2015, 2, 8, 13, 00, 00, 0, time.Local)
-
 	//Interval start time
 	is := time.Date(2006, 2, 1, 14, 00, 00, 0, time.Local)
 	//Interval end time
@@ -160,24 +167,40 @@ func TestMisc(t *testing.T) {
 
 	now = New(n)
 
-	assert.Equal(t, time.March, now.NextMonth(), "Error on NextMonth()")
+	if now.PreviousMonth() != time.January {
+		t.Errorf("PreviousMonth")
+	}
 
-	assert.Equal(t, time.January, now.PreviousMonth(), "Error on PreviousMonth()")
+	if now.NewTimeAfterInterval(is, ie, 7200).Format(format) != "2015-02-08 17:00:00" {
+		t.Errorf("NewTimeAfterInterval")
+	}
 
-	assert.Equal(t, "2015-02-08 17:00:00", now.NewTimeAfterInterval(is, ie, 7200).Format(format), "Error on NewTimeAfterInterval")
+	if now.TomorrowDayOfWeek() != time.Monday {
+		t.Errorf("TomorrowDayOfWeek")
+	}
 
-	assert.Equal(t, time.Monday, now.TomorrowDayOfWeek(), "Error on TomorrowDayOfWeek")
+	if now.DayOfWeekAfterNDays(8) != time.Monday {
+		t.Errorf("DayOfWeekAfterNDays")
+	}
 
-	assert.Equal(t, time.Monday, now.DayOfWeekAfterNDays(8), "Error on DayOfWeekAfterNDays")
+	if now.YesterdayDayOfWeek() != time.Saturday {
+		t.Errorf("YesterdayDayOfWeek")
+	}
 
-	assert.Equal(t, time.Saturday, now.YesterdayDayOfWeek(), "Error on YesterdayDayOfWeek")
+	if now.AddDays(2).Format(format) != "2015-02-10 13:00:00" {
+		t.Errorf("AddDays")
+	}
 
-	assert.Equal(t, "2015-02-10 13:00:00", now.AddDays(2).Format(format), "Error on AddDays")
+	if now.SecondsToEndOfDay() != 39599 {
+		t.Errorf("SecondsToEndOfDay")
+	}
 
-	assert.Equal(t, 39599, now.SecondsToEndOfDay(), "Error on SecondsToEndOfDay")
+	if now.EndOfDay().Format(format) != "2015-02-08 23:59:59" {
+		t.Errorf("EndOfDay")
+	}
 
-	assert.Equal(t, "2015-02-08 23:59:59", now.EndOfDay().Format(format), "Error on EndOfDay")
-
-	assert.Equal(t, "2015-02-08 00:00:00", now.BeginningOfDay().Format(format), "Error on BeginningOfDay")
+	if now.BeginningOfDay().Format(format) != "2015-02-08 00:00:00" {
+		t.Errorf("BeginningOfDay")
+	}
 
 }
