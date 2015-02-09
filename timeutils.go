@@ -119,3 +119,8 @@ func (t *Now) SecondsToEndOfDay() int32 {
 	dt := t.EndOfDay().Add(-time.Nanosecond).Sub(t.Time)
 	return int32(time.Duration(dt) / time.Second)
 }
+
+//Between check the given time instance if between to time instances
+func (t *Now) Between(start time.Time, end time.Time) bool {
+	return t.Before(end) && t.After(start)
+}

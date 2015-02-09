@@ -203,4 +203,23 @@ func TestMisc(t *testing.T) {
 		t.Errorf("BeginningOfDay")
 	}
 
+	is = time.Date(2006, 2, 1, 14, 00, 00, 0, time.Local)
+
+	ie = time.Date(2006, 2, 1, 16, 00, 00, 0, time.Local)
+
+	n = time.Date(2006, 2, 1, 14, 41, 49, 0, time.Local)
+	now = New(n)
+
+	if now.Between(is, ie) != true {
+		t.Errorf("Between")
+	}
+
+	is = time.Date(2015, 2, 1, 14, 00, 00, 0, time.Local)
+
+	ie = time.Date(2016, 2, 1, 16, 00, 00, 0, time.Local)
+
+	if now.Between(is, ie) == true {
+		t.Errorf("Between")
+	}
+
 }
